@@ -57,7 +57,7 @@ public class SpawnManager : MonoBehaviour
         var baseEnemy = enemyGo.GetComponent<BaseEnemy>();
         
         baseEnemy.SetPosition(GetRandomPosition());
-        baseEnemy.SetType(EnemyType.TARGET_BOULDER);
+        baseEnemy.SetType();
         enemyGo.gameObject.SetActive(true);
     }
 

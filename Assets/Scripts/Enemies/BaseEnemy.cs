@@ -4,13 +4,14 @@ using UnityEngine;
 public delegate void OnEnemyDisable(GameObject enemyGO);
 
 public enum NPC_State {MOVE, IDLE, DYING,DIE}
-[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(Collider2D))]
 public class BaseEnemy : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private BlinkingData blinkingData;
     [SerializeField] private GameObject sprite;
     [SerializeField] private ExplosionAnimation explosionAnimation;
+    [SerializeField] private EnemyType enemyType;
     
     private Rigidbody2D _rigidbody2D;
     private BlinkingEffect _blinkingEffect;
@@ -40,9 +41,9 @@ public class BaseEnemy : MonoBehaviour
         transform.position = position;
     }
 
-    public void SetType(EnemyType type)
+    public void SetType()
     {
-        health = GameDefinitions.HealthPerEnemyType[type];
+        health = GameDefinitions.HealthPerEnemyType[enemyType];
     }
     
     private void OnEnable()

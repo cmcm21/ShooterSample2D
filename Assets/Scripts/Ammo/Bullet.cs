@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour
 {
     [SerializeField] private int damage = 5;
     [SerializeField] private float fireForce = 100;
+    [SerializeField] private Vector2 shootDirection = Vector2.up;
 
     public int Damage => damage;
     private Rigidbody2D _rigidbody2D;
@@ -19,6 +20,11 @@ public class Bullet : MonoBehaviour
         
         if(_rigidbody2D == null)
             _rigidbody2D = GetComponent<Rigidbody2D>();
-        _rigidbody2D.AddForce(transform.up * fireForce);
+        _rigidbody2D.AddForce(shootDirection * fireForce);
+    }
+
+    private void Update()
+    {
+        Debug.Log($"bullet position : {transform.position}");
     }
 }

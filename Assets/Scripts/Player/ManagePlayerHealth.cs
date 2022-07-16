@@ -27,6 +27,12 @@ public class ManagePlayerHealth : MonoBehaviour
             enemy.GetHit(collisionDamage);
             GetHit(collisionDamage/2);
         }
+        else if (other.gameObject.CompareTag("Bullet"))
+        {
+            var bullet = other.gameObject.GetComponent<Bullet>();
+            other.gameObject.SetActive(false);
+            GetHit(bullet.Damage);
+        }
     }
 
     private void GetHit(int damage)
