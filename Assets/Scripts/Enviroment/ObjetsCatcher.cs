@@ -5,14 +5,11 @@ using UnityEngine;
 
 public class ObjetsCatcher : MonoBehaviour
 {
-    [SerializeField] private bool CheckEnemies;
+    [SerializeField] private GameDefinitions.Tags[] toCheckTags;
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log($"other: {other.name}");
-        if (other.CompareTag("Bullet"))
-            other.gameObject.SetActive(false);
-        
-        if(other.CompareTag("Enemy") && CheckEnemies)
-            other.gameObject.SetActive(false);
+        foreach(var toCheckTag in toCheckTags)
+            if(other.CompareTag(toCheckTag.ToString()))
+                other.gameObject.SetActive(false);
     }
 }

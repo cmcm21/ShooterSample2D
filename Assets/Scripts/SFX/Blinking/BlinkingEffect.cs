@@ -13,17 +13,17 @@ public class BlinkingEffect
 
     public Action OnAnimationFinished;
      
-    public BlinkingEffect(BlinkingData blinkingData)
+    public BlinkingEffect(BlinkingData blinkingData,ref SpriteRenderer spriteRenderer)
     {
         blinkingColor = blinkingData.blinkingColor;
         time = blinkingData.time;
+        this.spriteRenderer = spriteRenderer;
     }
 
-    public void GetHit(ref SpriteRenderer spriteRenderer)
+    public void Blink()
     {
         if (isBlinking) return;
         
-        this.spriteRenderer = spriteRenderer;
         previousColor = spriteRenderer.color;
         spriteRenderer.color = blinkingColor;
         
@@ -41,14 +41,15 @@ public class BlinkingEffect
             timer = 0;
             spriteRenderer.color = previousColor;
             OnAnimationFinished?.Invoke();
+            
         }
     }
 
     public void Stop()
     {
         isBlinking = false;
-        spriteRenderer.color = previousColor;
         timer = 0;
+        spriteRenderer.color = previousColor;
     }
 }
 

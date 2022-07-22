@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 1046024433006359024}
   - component: {fileID: 5157293347214721477}
   - component: {fileID: 7566238701758554403}
+  - component: {fileID: 8749051278272213493}
   m_Layer: 0
   m_Name: Meteor
-  m_TagString: Enemy
+  m_TagString: DamageObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,11 +77,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 50
-  blinkingData:
-    blinkingColor: {r: 1, g: 0.97164285, b: 0, a: 1}
-    time: 0.2
   sprite: {fileID: 6328045933015219155}
+  blinkingSpriteSfx: {fileID: 8749051278272213493}
   explosionAnimation: {fileID: 3828416387362470380}
+  enemyType: 0
 --- !u!212 &1046024433006359024
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -166,6 +166,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 25
+--- !u!114 &8749051278272213493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201830840193895819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 328bf734bffdf284ca2b90bd9504e80e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blinkingData:
+    blinkingColor: {r: 0.9811321, g: 0.8646916, b: 0.21751513, a: 1}
+    time: 0.25
+  sprite: {fileID: 5929583936959725589}
 --- !u!1 &6328045933015219155
 GameObject:
   m_ObjectHideFlags: 0

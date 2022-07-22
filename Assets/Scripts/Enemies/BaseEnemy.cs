@@ -8,14 +8,12 @@ public enum NPC_State {MOVE, IDLE, DYING,DIE}
 public class BaseEnemy : MonoBehaviour
 {
     [SerializeField] private float speed;
-    [SerializeField] private BlinkingData blinkingData;
     [SerializeField] private GameObject sprite;
+    [SerializeField] private BlinkingSpriteSFX blinkingSpriteSfx;
     [SerializeField] private ExplosionAnimation explosionAnimation;
     [SerializeField] private EnemyType enemyType;
     
     private Rigidbody2D _rigidbody2D;
-    private BlinkingEffect _blinkingEffect;
-    private SpriteRenderer _spriteRenderer;
     private NPC_State State;
 
     private float[] xRange = new float[2] { -8f,8f };
@@ -26,6 +24,7 @@ public class BaseEnemy : MonoBehaviour
     public void Start()
     {
         explosionAnimation.onExplosionFinished += OnExplosionAnimationFinished;
+        blinkingSpriteSfx.OnAnimationFinished += CheckHealth;
         State = NPC_State.IDLE;
     }
 
@@ -49,16 +48,15 @@ public class BaseEnemy : MonoBehaviour
     private void OnEnable()
     {
         sprite.SetActive(true); 
-        Reset();    
+        Restart();    
         GetDependencies();
         Move();
     }
 
-    private void Reset()
+    private void Restart()
     {
         State = NPC_State.IDLE;
         transform.rotation = Quaternion.identity;
-        ResetBlinkingEffect();
     }
 
     private void CheckHealth()
@@ -70,7 +68,7 @@ public class BaseEnemy : MonoBehaviour
     private void Dead()
     {
         State = NPC_State.DYING;
-        _blinkingEffect.Stop();
+        blinkingSpriteSfx.Stop();
         sprite.SetActive(false);
         explosionAnimation.gameObject.SetActive(true);
     }
@@ -79,25 +77,12 @@ public class BaseEnemy : MonoBehaviour
     {
         if (_rigidbody2D == null)
             _rigidbody2D = GetComponent<Rigidbody2D>();
-        if (_spriteRenderer == null)
-            _spriteRenderer = sprite.GetComponent<SpriteRenderer>();
-    }
-
-    private void ResetBlinkingEffect()
-    {
-        _blinkingEffect ??= new BlinkingEffect(blinkingData);
-        _blinkingEffect.OnAnimationFinished += CheckHealth;
     }
 
     private void Move()
     {
         State = NPC_State.MOVE;
         _rigidbody2D.AddForce(Vector2.down * speed);
-    }
-
-    private void Update()
-    {
-        _blinkingEffect?.Update(Time.deltaTime);
     }
 
     private void FixedUpdate()
@@ -116,6 +101,7 @@ public class BaseEnemy : MonoBehaviour
             other.gameObject.SetActive(false);
             if (State == NPC_State.DYING) return;
             var damage = other.collider.GetComponent<Bullet>().Damage;
+            blinkingSpriteSfx.Blink();
             GetHit(damage);
         }
     }
@@ -123,17 +109,17 @@ public class BaseEnemy : MonoBehaviour
     public void GetHit(int damage)
     {
         health -= damage; 
-        _blinkingEffect.GetHit(ref _spriteRenderer);
+        CheckHealth();
     }
 
     private void OnDisable()
     {
         enemyDisable?.Invoke(gameObject);
-        _blinkingEffect.OnAnimationFinished -= CheckHealth;
     }
 
     private void OnDestroy()
     {
+        blinkingSpriteSfx.OnAnimationFinished -= CheckHealth;
         explosionAnimation.onExplosionFinished -= OnExplosionAnimationFinished;
     }
 }

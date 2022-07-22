@@ -24,8 +24,9 @@ public class ExplosionAnimation : MonoBehaviour
             _animator = GetComponent<Animator>();
     }
 
-    private void OnEnable()
+    public void OnEnable()
     {
+        gameObject.SetActive(true);
         GetAnimator();
         _animator.SetTrigger(AnimationStart);
     }
@@ -34,5 +35,6 @@ public class ExplosionAnimation : MonoBehaviour
     {
         _animator.SetTrigger(AnimationFinished);
         onExplosionFinished?.Invoke();
+        gameObject.SetActive(false);
     }
 }

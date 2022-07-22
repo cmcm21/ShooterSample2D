@@ -22,9 +22,4 @@ public class Bullet : MonoBehaviour
             _rigidbody2D = GetComponent<Rigidbody2D>();
         _rigidbody2D.AddForce(shootDirection * fireForce);
     }
-
-    private void Update()
-    {
-        Debug.Log($"bullet position : {transform.position}");
-    }
 }

@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 8604450000129180100}
   - component: {fileID: 1373013229015133972}
   - component: {fileID: 5923049636734034502}
+  - component: {fileID: 4536872453621322933}
   m_Layer: 0
   m_Name: NpC
   m_TagString: Enemy
@@ -132,11 +133,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  blinkingData:
-    blinkingColor: {r: 1, g: 0.9021408, b: 0.36320752, a: 0}
-    time: 0.4
   sprite: {fileID: 8604450000663991218}
+  blinkingSpriteSfx: {fileID: 4536872453621322933}
   explosionAnimation: {fileID: 2337245205037321581}
+  enemyType: 0
 --- !u!114 &8604450000129180100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,6 +191,22 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.45
+--- !u!114 &4536872453621322933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8604450000129180098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 328bf734bffdf284ca2b90bd9504e80e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blinkingData:
+    blinkingColor: {r: 0.8301887, g: 0.23104309, b: 0.23104309, a: 1}
+    time: 0.25
+  sprite: {fileID: 8604450000663991216}
 --- !u!1 &8604450000663991218
 GameObject:
   m_ObjectHideFlags: 0
