@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveNPC : MonoBehaviour
+public class NPC_Controller : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private Transform cannon;

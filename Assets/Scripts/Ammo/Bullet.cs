@@ -22,4 +22,10 @@ public class Bullet : MonoBehaviour
             _rigidbody2D = GetComponent<Rigidbody2D>();
         _rigidbody2D.AddForce(shootDirection * fireForce);
     }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.collider.CompareTag("Bullet"))
+            gameObject.SetActive(false);
+    }
 }

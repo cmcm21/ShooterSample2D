@@ -1,8 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using RandomSys = System.Random;
+
+public delegate void SpawnEnemy(GameObject gameObject); 
 
 public class SpawnManager : MonoBehaviour
 {
@@ -12,9 +16,13 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject[] targets;
     
     private int currentTarget;
+    public event SpawnEnemy OnSpawnEnemy;
 
     private void Start()
     {
+        var rnd = new RandomSys();
+        targets = targets.OrderBy(x => rnd.Next()).ToArray();
+        
         if(spawnRangeX.Length != 2)
             Debug.LogError("Spawn range was wrong set");
         if(spawnTimeRange.Length !=  2)
@@ -59,6 +67,7 @@ public class SpawnManager : MonoBehaviour
         baseEnemy.SetPosition(GetRandomPosition());
         baseEnemy.SetType();
         enemyGo.gameObject.SetActive(true);
+        OnSpawnEnemy?.Invoke(enemyGo);
     }
 
     private Vector3 GetRandomPosition()
