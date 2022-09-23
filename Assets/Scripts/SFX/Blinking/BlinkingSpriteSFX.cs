@@ -9,19 +9,25 @@ public class BlinkingSpriteSFX : MonoBehaviour
     [SerializeField] private BlinkingData blinkingData;
     [SerializeField] private SpriteRenderer sprite;
 
-    public Action OnAnimationFinished = delegate {}; 
+    public event Action OnAnimationFinished = delegate {}; 
 
     private BlinkingEffect _blinkingEffect;
 
     private void Awake()
     {
         _blinkingEffect = new BlinkingEffect(blinkingData,ref sprite);
-        _blinkingEffect.OnAnimationFinished += OnAnimationFinished;
+        _blinkingEffect.OnAnimationFinished += RiseEvent;
     }
 
     private void OnDestroy()
     {
-        _blinkingEffect.OnAnimationFinished -= OnAnimationFinished;
+        _blinkingEffect.OnAnimationFinished -= RiseEvent;
+    }
+
+    private void RiseEvent()
+    {
+       Debug.Log("Rising event animation finished");
+       OnAnimationFinished?.Invoke();
     }
 
     private void Update()

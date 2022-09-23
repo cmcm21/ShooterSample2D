@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7566238701758554403}
   - component: {fileID: 8749051278272213493}
   - component: {fileID: 6888574215558148441}
+  - component: {fileID: 3103151471072110109}
   m_Layer: 7
   m_Name: Meteor
   m_TagString: DamageObject
@@ -78,10 +79,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 50
-  sprite: {fileID: 6328045933015219155}
-  blinkingSpriteSfx: {fileID: 8749051278272213493}
-  explosionAnimation: {fileID: 3828416387362470380}
-  enemyType: 0
 --- !u!212 &1046024433006359024
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -195,6 +192,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da5e59baf9b43d2409621deb28c1f608, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3103151471072110109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201830840193895819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5873a0abaff1354c8613e843b7cd850, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blinkingSpriteSfx: {fileID: 8749051278272213493}
+  explosionAnimation: {fileID: 3828416387362470380}
+  targetType: 0
+  sprite: {fileID: 6328045933015219155}
 --- !u!1 &6328045933015219155
 GameObject:
   m_ObjectHideFlags: 0

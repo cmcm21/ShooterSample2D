@@ -17,10 +17,21 @@ public class NPC_Controller : MonoBehaviour
     private float _timer = 0f;
     private float _fireCoolDown = 0f;
     private State state;
+    private bool _isVisible;
 
     private void OnEnable()
     {
         state = State.CANSHOOT;
+    }
+
+    private void OnDisable()
+    {
+        _isVisible = false;
+    }
+
+    private void OnBecameVisible()
+    {
+        _isVisible = true;
     }
 
     private void Update()
@@ -35,10 +46,10 @@ public class NPC_Controller : MonoBehaviour
             }
         }
     }
-    
+
     private void FixedUpdate()
     {
-        DetectTarget();
+        if(_isVisible) DetectTarget();
         Move();
     }
     
@@ -72,4 +83,5 @@ public class NPC_Controller : MonoBehaviour
             break;
         }
     }
+
 }

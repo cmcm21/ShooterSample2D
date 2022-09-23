@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using RandomSys = System.Random;
@@ -10,62 +11,77 @@ public delegate void SpawnEnemy(GameObject gameObject);
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] private float[] spawnTimeRange;
     [SerializeField] private float[] spawnRangeX;
     [SerializeField] private float spawnYPosition;
-    [SerializeField] private GameObject[] targets;
+    [SerializeField] private GameObject spawnableObjectsContainer;
     
-    private int currentTarget;
+    private float _spawnTimeFactor;
+    private int _currentTarget;
+    private float _maxRespawnTime;
+    private GameManager _gameManager;
+    private Coroutine _spawnCoroutine;
+    private List<GameObject> _targets;
     public event SpawnEnemy OnSpawnEnemy;
 
     private void Start()
     {
-        var rnd = new RandomSys();
-        targets = targets.OrderBy(x => rnd.Next()).ToArray();
+        InitEnemies();
+        _maxRespawnTime = 0; 
         
         if(spawnRangeX.Length != 2)
             Debug.LogError("Spawn range was wrong set");
-        if(spawnTimeRange.Length !=  2)
-            Debug.LogError("Spawn time rate was wrong set");
-        
-        foreach (var target in targets)
+
+        _gameManager = FindObjectOfType<GameManager>();
+        if (_gameManager != null)
         {
-            var baseEnemy = target.GetComponent<BaseEnemy>();
-            baseEnemy.enemyDisable += BaseEnemyOnEnemyDisable;
+            _gameManager.OnDifficultyIncreased += GameManager_OnDifficultyIncreased;
+            _spawnTimeFactor = _gameManager.TimerThreshold;
         }
-
-        InvokeRepeating(nameof(SpawnTarget), GetRandomTime(),GetRandomTime()); 
     }
 
-    private void SpawnTarget()
+    private void InitEnemies()
     {
-        if (!targets[currentTarget].activeSelf)
-            SpawnEnemy(targets[currentTarget]);
+        var rnd = new RandomSys();
+        _targets = new List<GameObject>();
+        for(int i = 0; i < spawnableObjectsContainer.transform.childCount; i++)
+            _targets.Add(spawnableObjectsContainer.transform.GetChild(i).gameObject);
+
+        _targets = _targets.OrderBy(x => rnd.Next()).ToList();
+    }
+
+    private void GameManager_OnDifficultyIncreased(float difficulty)
+    {
+        _maxRespawnTime = _spawnTimeFactor / difficulty;
+
+        if (_spawnCoroutine == null)
+            _spawnCoroutine = StartCoroutine(SpawnEnemyCoroutine());
+    }
+
+    private void GoOverEnemies()
+    {
+        if (!_targets[_currentTarget].activeSelf)
+            SpawnEnemy(_targets[_currentTarget]);
         
-        currentTarget++;
-        currentTarget %= targets.Length;
+        _currentTarget++;
+        _currentTarget %= _targets.Count;
     }
 
-    private void BaseEnemyOnEnemyDisable(GameObject enemyGo)
+    private IEnumerator SpawnEnemyCoroutine()
     {
-        if(gameObject)
-            StartCoroutine(SpawnEnemyCoroutine(enemyGo));
-    }
-
-    private IEnumerator SpawnEnemyCoroutine(GameObject enemyGo)
-    {
-        var waitTime = GetRandomTime();
-        yield return new WaitForSeconds(waitTime);
-        
-        SpawnEnemy(enemyGo);
+        while (isActiveAndEnabled)
+        {
+            var waitTime = GetRandomTime();
+            yield return new WaitForSeconds(waitTime);
+            
+            GoOverEnemies();
+        }
     }
 
     private void SpawnEnemy(GameObject enemyGo)
     {
-        var baseEnemy = enemyGo.GetComponent<BaseEnemy>();
+        var baseEnemy = enemyGo.GetComponent<MovingTarget>();
         
         baseEnemy.SetPosition(GetRandomPosition());
-        baseEnemy.SetType();
         enemyGo.gameObject.SetActive(true);
         OnSpawnEnemy?.Invoke(enemyGo);
     }
@@ -78,16 +94,6 @@ public class SpawnManager : MonoBehaviour
 
     private float GetRandomTime()
     {
-        return Random.Range(spawnTimeRange[0], spawnTimeRange[1]);
-    }
-
-    private void OnDestroy()
-    {
-        foreach (var target in targets)
-        {
-            if (!target) continue;
-            var baseEnemy = target.GetComponent<BaseEnemy>();
-            baseEnemy.enemyDisable -= BaseEnemyOnEnemyDisable;
-        }
+        return Random.Range(0.5f, _maxRespawnTime);
     }
 }

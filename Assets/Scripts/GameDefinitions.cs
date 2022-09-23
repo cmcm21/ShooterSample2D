@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 
-public enum EnemyType {TARGET_BOULDER,NPC}
+public enum TargetType {METEOR,NPC}
 
 public static class GameDefinitions 
 {
 
-    public static readonly Dictionary<EnemyType, int> HealthPerEnemyType = new Dictionary<EnemyType, int>()
+    public static readonly Dictionary<TargetType, int> HealthPerTargetType = new Dictionary<TargetType, int>()
     {
-        {EnemyType.TARGET_BOULDER, 40},
-        { EnemyType.NPC ,100}
+        {TargetType.METEOR, 40},
+        {TargetType.NPC ,100},
     };
 
     public enum Tags
@@ -16,6 +16,7 @@ public static class GameDefinitions
         Bullet,
         Enemy,
         Player,
-        DamageObject
+        DamageObject,
+        Bonus
     };
 }
