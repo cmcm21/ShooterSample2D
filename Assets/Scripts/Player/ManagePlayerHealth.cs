@@ -75,10 +75,12 @@ public class ManagePlayerHealth : MonoBehaviour
     private async void ActivateShield(float powerUpTime)
     {
         shield.gameObject.SetActive(true);
+        AudioManager.Play2DAudio(GameDefinitions.SFXClip.ShieldUp);
         _state = State.INVINCIBLE;
         await Task.Delay((int)(powerUpTime * 1000));
         _state = State.COMMON;
         shield.gameObject.SetActive(false);
+        AudioManager.Play2DAudio(GameDefinitions.SFXClip.ShieldDown);
     }
     
 

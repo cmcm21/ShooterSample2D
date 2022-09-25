@@ -3,19 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void OnTargetDisable(GameObject enemyGO);
+public delegate void OnTargetDisabled(GameObject enemyGO);
 public enum Target_State {MOVE, IDLE, DESTROYING,DESTROYED}
 public class ManageEnemyHealth : MonoBehaviour
 {
     [SerializeField] private BlinkingSpriteSFX blinkingSpriteSfx;
     [SerializeField] private ExplosionAnimation explosionAnimation;
     [SerializeField] private TargetType targetType;
+    public TargetType TargetType => targetType;
     [SerializeField] private GameObject sprite;
     
     
     private int health = 0;
     private Target_State State;
-    public event OnTargetDisable targetDisable;
+    public event OnTargetDisabled TargetDisabled;
 
     private void Start()
     {
@@ -45,6 +46,7 @@ public class ManageEnemyHealth : MonoBehaviour
         blinkingSpriteSfx.Stop();
         sprite.SetActive(false);
         explosionAnimation.gameObject.SetActive(true);
+        AudioManager.PlayPositionalAudio(GameDefinitions.SFXClip.Explosion,transform.position);
     }   
     
     private void CheckHealth()
@@ -81,6 +83,6 @@ public class ManageEnemyHealth : MonoBehaviour
     }   
     private void OnDisable()
     {
-        targetDisable?.Invoke(gameObject);
+        TargetDisabled?.Invoke(gameObject);
     }
 }

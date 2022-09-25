@@ -65,5 +65,6 @@ public class PlayerController : MonoBehaviour
        bullets[currentBullet].transform.position = new Vector2(cannonPosition.position.x, cannonPosition.position.y);
        currentBullet++;
        currentBullet %= bullets.Length;
+       AudioManager.PlayPositionalAudio(GameDefinitions.SFXClip.Fire,transform.position);
     }
 }

@@ -80,6 +80,7 @@ public class NPC_Controller : MonoBehaviour
             bullets[i].SetActive(true);
             bullets[i].transform.position = new Vector2(cannon.position.x, cannon.position.y);
             state = State.COOLDOWN;
+            AudioManager.PlayPositionalAudio(GameDefinitions.SFXClip.Fire,transform.position);
             break;
         }
     }
