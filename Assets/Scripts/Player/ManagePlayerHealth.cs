@@ -93,9 +93,13 @@ public class ManagePlayerHealth : MonoBehaviour
     {
         Debug.Log("Checking health");
         if (playerHealth <= 0)
-        {
-            blinkingSpriteSfx.Stop(); 
-            OnPlayerDie?.Invoke();
-        }
+            Die();
+    }
+
+    private void Die()
+    {
+        AudioManager.Play2DAudio(GameDefinitions.SFXClip.Lose);
+        blinkingSpriteSfx.Stop(); 
+        OnPlayerDie?.Invoke();
     }
 }
