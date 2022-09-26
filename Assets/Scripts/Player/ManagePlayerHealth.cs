@@ -101,5 +101,6 @@ public class ManagePlayerHealth : MonoBehaviour
         AudioManager.Play2DAudio(GameDefinitions.SFXClip.Lose);
         blinkingSpriteSfx.Stop(); 
         OnPlayerDie?.Invoke();
+        gameObject.SetActive(false);
     }
 }

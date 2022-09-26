@@ -80,6 +80,12 @@ public static class AudioManager
     {
         audioSource.AudioSource.PlayOneShot(clip);
     }
+
+    public static void Reset()
+    {
+       _audioClipsDictionary.Clear(); 
+       _goAudioSources.Clear();
+    }
 }
 public class GOAudioSource
 {

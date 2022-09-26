@@ -6,11 +6,13 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
 public delegate void DifficultyIncreased(float difficulty);
+public delegate void GameplayLoaded();
+
+public delegate void GameOver();
 
 public class GameManager : MonoBehaviour
 {
-    enum GameManagerStatus {STARTED,LOADING}
-    [SerializeField] private GameObject loadingScreen;
+    enum GameManagerStatus {GAMEPLAY,LOADING,GAME_OVER}
     [SerializeField] private float timerThreshold = 5;
     public float TimerThreshold => timerThreshold;
 
@@ -21,6 +23,8 @@ public class GameManager : MonoBehaviour
     private ManagePlayerHealth _playerHealth;
     private GameplayDataManager _gameplayDataManager;
     public event DifficultyIncreased OnDifficultyIncreased;
+    public event GameplayLoaded OnGameplayLoaded;
+    public event GameOver OnGameOver;
 
     private void Awake()
     {
@@ -47,23 +51,30 @@ public class GameManager : MonoBehaviour
 
     private void GameplayDataManager_OnClipsDataLoaded(AudioClipsData audioClipsData)
     {
-        loadingScreen.SetActive(false);
         AudioManager.Initialize(audioClipsData);
         OnDifficultyIncreased?.Invoke(_difficulty);
-        _state = GameManagerStatus.STARTED;
+        _state = GameManagerStatus.GAMEPLAY;
+        OnGameplayLoaded?.Invoke();
     }
 
     private void Update()
     {
-        if (_state == GameManagerStatus.LOADING) return;
-        
-        _timer += Time.deltaTime;
+        CountTime();
+        if(_state == GameManagerStatus.GAME_OVER && Input.GetKeyDown(KeyCode.Return))
+            ReloadLevel();
+    }
 
-        if (_timer >= timerThreshold)
-        {
-            _timer = 0;
-            IncreaseDifficulty();
-        }
+    private void CountTime()
+    {
+         if (_state != GameManagerStatus.GAMEPLAY) return;
+         
+         _timer += Time.deltaTime;
+ 
+         if (_timer >= timerThreshold)
+         {
+             _timer = 0;
+             IncreaseDifficulty();
+         }       
     }
 
     private void IncreaseDifficulty()
@@ -80,6 +91,13 @@ public class GameManager : MonoBehaviour
 
     private void PlayerHealthOnOnPlayerDie()
     {
+        _state = GameManagerStatus.GAME_OVER;
+        OnGameOver?.Invoke();
+    }
+
+    private void ReloadLevel()
+    {
+        AudioManager.Reset();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
